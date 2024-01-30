@@ -17,6 +17,12 @@ const responseHeaderMap: Record<string, string> = {
 
 export function makeSimpleProxyFetcher(proxyUrl: string, f: FetchLike): Fetcher {
   const proxiedFetch: Fetcher = async (url, ops) => {
+    let proxyUrl2 = '';
+    if (ops.baseUrl === 'https://rezka.ag') {
+      proxyUrl2 = 'https://simple-proxy.jevinruv.workers.dev';
+    } else {
+      proxyUrl2 = 'https://simple-proxy-j.netlify.app';
+    }
     const fetcher = makeStandardFetcher(async (a, b) => {
       const res = await f(a, b);
 
@@ -41,7 +47,7 @@ export function makeSimpleProxyFetcher(proxyUrl: string, f: FetchLike): Fetcher 
       return entry;
     });
 
-    return fetcher(proxyUrl, {
+    return fetcher(proxyUrl2, {
       ...ops,
       query: {
         destination: fullUrl,
